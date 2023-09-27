@@ -5,31 +5,19 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <sys\stat.h>
-
-#include <unistd.h>
-#include <fcntl.h>
 #include <zlib.h>
 
 #ifdef __unix__
-    #define byteswap_ulong(x)
-    (
-    char temp, temp2;
-    unsigned char *l = (unsigned char *) &x;
-
-    temp = l[0];
-    temp2 = l[3];
-
-    l[0] = temp2;
-    l[3] = temp;
-
-    temp = l[1];
-    temp2 = l[2];
-
-    l[1] = temp2;
-    l[2] = temp;
-    )
+    #include <bytswap.h>
+    #include <fcntl.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
+    #define byteswap_ulong(x) bswap_32(x)
 #elif __WIN32__ || _MSC_VER
+    #include <sys\stat.h>
+    #include <unistd.h>
+    #include <fcntl.h>
+
     #define byteswap_ulong(x) _byteswap_ulong(x)
 #endif
 
